@@ -13,8 +13,8 @@ class PerpustakaanSearchApp:
         if 'page' not in st.session_state:
             st.session_state.page = 0
     
-    def __update_results(self):
-        pass
+    def __reset_page(self):
+        st.session_state.page = 0
     
     def __get_options(self, data):
         return sorted(list(set(data)))
@@ -86,27 +86,27 @@ class PerpustakaanSearchApp:
             with col_jenis:
                 if 'jenis_perpustakaan_options' not in st.session_state:
                     st.session_state.jenis_perpustakaan_options = ['Semua'] + self.__get_options(self.library_service.get_jenis_perpustakaan())
-                jenis_perpustakaan = st.selectbox('Jenis Perpustakaan', st.session_state.jenis_perpustakaan_options)
+                jenis_perpustakaan = st.selectbox('Jenis Perpustakaan', st.session_state.jenis_perpustakaan_options, on_change=self.__reset_page)
             with col_subjenis:
                 if jenis_perpustakaan != 'Semua':
                     if 'subjenis_options' not in st.session_state:
                         st.session_state.subjenis_options = ['Semua'] + self.__get_options(self.library_service.get_subjenis(jenis_perpustakaan))
-                    subjenis = st.selectbox('Subjenis', st.session_state.subjenis_options, on_change=self.__update_results)
+                    subjenis = st.selectbox('Subjenis', st.session_state.subjenis_options, on_change=self.__reset_page)
                 else:
-                    subjenis = st.selectbox('Subjenis', ['Semua'])
+                    subjenis = st.selectbox('Subjenis', ['Semua'], on_change=self.__reset_page)
             
             # Baris kedua
             col_provinsi, col_kab_kota = st.columns(2)
             with col_provinsi:
                 if 'provinsi_options' not in st.session_state:
                     st.session_state.provinsi_options = [('', 'Semua')] + self.__get_options_with_ids(self.library_service.get_provinsi())
-                provinsi = st.selectbox('Provinsi', options=st.session_state.provinsi_options, format_func=lambda x: x[1], on_change=self.__update_results)
+                provinsi = st.selectbox('Provinsi', options=st.session_state.provinsi_options, format_func=lambda x: x[1], on_change=self.__reset_page)
             with col_kab_kota:
                 if provinsi[0] != '':
                     kab_kota_options = [('', 'Semua')] + self.__get_options_with_ids(self.library_service.get_kab_kota(provinsi[0]))
                 else:
                     kab_kota_options = [('', 'Semua')]
-                kab_kota = st.selectbox('Kabupaten/Kota', options=kab_kota_options, format_func=lambda x: x[1], on_change=self.__update_results)
+                kab_kota = st.selectbox('Kabupaten/Kota', options=kab_kota_options, format_func=lambda x: x[1], on_change=self.__reset_page)
             
             # Baris ketiga
             col_kecamatan, col_kelurahan = st.columns(2)
@@ -115,13 +115,13 @@ class PerpustakaanSearchApp:
                     kecamatan_options = [('', 'Semua')] + self.__get_options_with_ids(self.library_service.get_kecamatan(kab_kota[0]))
                 else:
                     kecamatan_options = [('', 'Semua')]
-                kecamatan = st.selectbox('Kecamatan', options=kecamatan_options, format_func=lambda x: x[1], on_change=self.__update_results)
+                kecamatan = st.selectbox('Kecamatan', options=kecamatan_options, format_func=lambda x: x[1], on_change=self.__reset_page)
             with col_kelurahan:
                 if kecamatan[0] != '':
                     kelurahan_desa_options = [('', 'Semua')] + self.__get_options_with_ids(self.library_service.get_kelurahan_desa(kecamatan[0]))
                 else:
                     kelurahan_desa_options = [('', 'Semua')]
-                kelurahan_desa = st.selectbox('Kelurahan/Desa', options=kelurahan_desa_options, format_func=lambda x: x[1], on_change=self.__update_results)
+                kelurahan_desa = st.selectbox('Kelurahan/Desa', options=kelurahan_desa_options, format_func=lambda x: x[1], on_change=self.__reset_page)
         
         # Gunakan ID untuk pencarian
         self.search_libraries(
