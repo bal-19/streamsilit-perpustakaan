@@ -8,45 +8,45 @@ load_dotenv()
 
 class LibraryService:
     def __init__(self) -> None:
-        self.base_url = os.getenv("BASE_URL")
+        self.api_url = os.getenv("API_URL")
     
     def get_jenis_perpustakaan(self) -> list:
-        res = requests.get(f"{self.base_url}/list/type")
+        res = requests.get(f"{self.api_url}/list/type")
         if res.status_code == 200:
             return res.json().get("types", [])
         else:
             return []
     
     def get_subjenis(self, jenis_perpustakaan: str) -> list:
-        res = requests.get(f"{self.base_url}/list/subtype/{jenis_perpustakaan}")
+        res = requests.get(f"{self.api_url}/list/subtype/{jenis_perpustakaan}")
         if res.status_code == 200:
             return res.json().get("subtypes", [])
         else:
             return []
     
     def get_provinsi(self) -> list[dict]:
-        res = requests.get(f"{self.base_url}/list/region/provinces")
+        res = requests.get(f"{self.api_url}/list/region/provinces")
         if res.status_code == 200:
             return res.json().get("data", [])
         else:
             return []
     
     def get_kab_kota(self, provinsi: str) -> list[dict]:
-        res = requests.get(f"{self.base_url}/list/region/regencies/{provinsi}")
+        res = requests.get(f"{self.api_url}/list/region/regencies/{provinsi}")
         if res.status_code == 200:
             return res.json().get("data", [])
         else:
             return []
     
     def get_kecamatan(self, kab_kota: str) -> list[dict]:
-        res = requests.get(f"{self.base_url}/list/region/districts/{kab_kota}")
+        res = requests.get(f"{self.api_url}/list/region/districts/{kab_kota}")
         if res.status_code == 200:
             return res.json().get("data", [])
         else:
             return []
     
     def get_kelurahan_desa(self, kecamatan: str) -> list[dict]:
-        res = requests.get(f"{self.base_url}/list/region/villages/{kecamatan}")
+        res = requests.get(f"{self.api_url}/list/region/villages/{kecamatan}")
         if res.status_code == 200:
             return res.json().get("data", [])
         else:
@@ -64,7 +64,7 @@ class LibraryService:
             "length": "10"
         }
         
-        res = requests.get(f"{self.base_url}/data", params=params)
+        res = requests.get(f"{self.api_url}/data", params=params)
         if res.status_code == 200:
             return res.json()
         else:
