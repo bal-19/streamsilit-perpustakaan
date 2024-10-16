@@ -1,0 +1,9 @@
+__pycache__/
+.venv/
+.git/
+data/
+test/
+.env
+LICENSE
+.gitignore
+*.pyc
