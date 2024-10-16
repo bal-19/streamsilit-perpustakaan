@@ -36,9 +36,12 @@ class PerpustakaanSearchApp:
         
         # Menampilkan tabel jika data tersedia
         if data:
-            df = pd.DataFrame(data.get("data", []), index=range(start + 1, start + len(data.get("data", [])) + 1))
-            st.info(f"Menampilkan {len(df)} dari {data.get('total', 0)} data")
-            st.dataframe(df, use_container_width=True)
+            if data.get("data"):
+                df = pd.DataFrame(data.get("data", []), index=range(start + 1, start + len(data.get("data", [])) + 1))
+                st.info(f"Menampilkan {start + 1} - {start + len(data.get('data', []))} dari {data.get('total', 0)} data")
+                st.dataframe(df, use_container_width=True)
+            else:
+                st.warning('Tidak ada data yang ditemukan.')
         else:
             st.warning('Tidak ada data yang ditemukan.')
 
