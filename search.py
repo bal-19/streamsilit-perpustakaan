@@ -14,15 +14,19 @@ class PerpustakaanSearchApp:
             st.session_state.page = 0
     
     def __reset_page(self):
+        """reset session page"""
         st.session_state.page = 0
     
     def __get_options(self, data):
+        """mengembalikan option dengan nama"""
         return sorted(list(set(data)))
     
     def __get_options_with_ids(self, data):
+        """mengembalikan option dengan id dan nama"""
         return [(item['id'], item['nama']) for item in data]
     
     def search_libraries(self, jenis_perpustakaan, subjenis, provinsi, kab_kota, kecamatan, kelurahan_desa):
+        """proses pencarian data perpustakaan"""
         start = st.session_state.page * self.items_per_page
         data = self.library_service.get_libraries(
             jenis_perpustakaan if jenis_perpustakaan != 'Semua' else '',
@@ -34,7 +38,7 @@ class PerpustakaanSearchApp:
             start=start
         )
         
-        # Menampilkan tabel jika data tersedia
+        # menampilkan data jika ada
         if data:
             if data.get("data"):
                 df = pd.DataFrame(data.get("data", []), index=range(start + 1, start + len(data.get("data", [])) + 1))
@@ -45,8 +49,8 @@ class PerpustakaanSearchApp:
         else:
             st.warning('Tidak ada data yang ditemukan.')
 
+        # pagination
         col1, col2, col3 = st.columns([1, 2, 1])
-        
         with col1:
             if st.button("Previous", disabled=st.session_state.page == 0, use_container_width=True):
                 st.session_state.page -= 1
@@ -74,14 +78,17 @@ class PerpustakaanSearchApp:
                 if st.button("Next", use_container_width=True):
                     st.session_state.page += 1
                     st.rerun()
+            else:
+                st.button("Next", use_container_width=True, disabled=True)
 
     def run(self):
+        """run app"""
         st.markdown("<h1 style='text-align: center;'>🔍 Pencarian Perpustakaan di Indonesia</h1>", unsafe_allow_html=True)
         
+        # form pencarian
         col1, col2, col3 = st.columns([1,3,1])
-        
         with col2:
-            # Baris pertama
+            # baris pertama
             col_jenis, col_subjenis = st.columns(2)
             with col_jenis:
                 if 'jenis_perpustakaan_options' not in st.session_state:
@@ -95,7 +102,7 @@ class PerpustakaanSearchApp:
                 else:
                     subjenis = st.selectbox('Subjenis', ['Semua'], on_change=self.__reset_page)
             
-            # Baris kedua
+            # baris kedua
             col_provinsi, col_kab_kota = st.columns(2)
             with col_provinsi:
                 if 'provinsi_options' not in st.session_state:
@@ -108,7 +115,7 @@ class PerpustakaanSearchApp:
                     kab_kota_options = [('', 'Semua')]
                 kab_kota = st.selectbox('Kabupaten/Kota', options=kab_kota_options, format_func=lambda x: x[1], on_change=self.__reset_page)
             
-            # Baris ketiga
+            # baris ketiga
             col_kecamatan, col_kelurahan = st.columns(2)
             with col_kecamatan:
                 if kab_kota[0] != '':
@@ -123,7 +130,7 @@ class PerpustakaanSearchApp:
                     kelurahan_desa_options = [('', 'Semua')]
                 kelurahan_desa = st.selectbox('Kelurahan/Desa', options=kelurahan_desa_options, format_func=lambda x: x[1], on_change=self.__reset_page)
         
-        # Gunakan ID untuk pencarian
+        # proses pencarian
         self.search_libraries(
             jenis_perpustakaan=jenis_perpustakaan,
             subjenis=subjenis,
