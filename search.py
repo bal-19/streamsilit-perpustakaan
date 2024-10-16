@@ -4,7 +4,7 @@ import streamlit as st
 import pandas as pd
 
 
-st.set_page_config(layout="wide", page_title="List of libraries in Indonesia", page_icon="🔍")
+st.set_page_config(layout="wide", page_title="List of libraries in Indonesia", page_icon="📖")
 
 class PerpustakaanSearchApp:
     def __init__(self):
@@ -41,7 +41,7 @@ class PerpustakaanSearchApp:
         # menampilkan data jika ada
         if data:
             if data.get("data"):
-                df = pd.DataFrame(data.get("data", []), index=range(start + 1, start + len(data.get("data", [])) + 1))
+                df = pd.DataFrame(data.get("data", []), index=range(start + 1, start + len(data.get("data", [])) + 1), columns=["NPP", "Nama Perpustakaan", "Lembaga", "Alamat", "Telepon", "Email", "Website", "Jenis", "Subjenis", "Status", "Kode Pos", "Provinsi", "Kabupaten/Kota", "Kecamatan", "Kelurahan/Desa"])
                 st.info(f"Menampilkan {start + 1} - {start + len(data.get('data', []))} dari {data.get('total', 0)} data")
                 st.dataframe(df, use_container_width=True)
             else:
