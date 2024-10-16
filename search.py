@@ -45,7 +45,6 @@ class PerpustakaanSearchApp:
         else:
             st.warning('Tidak ada data yang ditemukan.')
 
-
         col1, col2, col3 = st.columns([1, 2, 1])
         
         with col1:
@@ -70,9 +69,11 @@ class PerpustakaanSearchApp:
                         st.rerun()
 
         with col3:
-            if st.button("Next", use_container_width=True):
-                st.session_state.page += 1
-                st.rerun()
+            is_last_page = start + len(data.get('data', [])) >= data.get('total', 0)
+            if not is_last_page:
+                if st.button("Next", use_container_width=True):
+                    st.session_state.page += 1
+                    st.rerun()
 
     def run(self):
         st.markdown("<h1 style='text-align: center;'>🔍 Pencarian Perpustakaan di Indonesia</h1>", unsafe_allow_html=True)
