@@ -50,6 +50,22 @@ class PerpustakaanSearchApp:
                 st.session_state.page -= 1
                 st.rerun()
 
+        with col2:
+            total_pages = (data.get('total', 0) + self.items_per_page - 1) // self.items_per_page
+            current_page = st.session_state.page + 1
+            
+            start_page = max(1, current_page - 1)
+            end_page = min(total_pages, start_page + 2)
+            
+            page_buttons = st.columns(3)
+            for i, page in enumerate(range(start_page, end_page + 1)):
+                if page == current_page:
+                    page_buttons[i].button(str(page), key=f"page_{page}", use_container_width=True, disabled=True)
+                else:
+                    if page_buttons[i].button(str(page), key=f"page_{page}", use_container_width=True):
+                        st.session_state.page = page - 1
+                        st.rerun()
+
         with col3:
             if st.button("Next", use_container_width=True):
                 st.session_state.page += 1
