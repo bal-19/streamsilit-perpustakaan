@@ -1,4 +1,4 @@
-from services.library_service import LibraryService
+from services import library_service
 
 import streamlit as st
 import pandas as pd
@@ -8,7 +8,6 @@ st.set_page_config(layout="wide", page_title="List of libraries in Indonesia", p
 
 class PerpustakaanSearchApp:
     def __init__(self):
-        self.library_service = LibraryService()
         self.items_per_page = 10
         if 'page' not in st.session_state:
             st.session_state.page = 0
@@ -28,7 +27,7 @@ class PerpustakaanSearchApp:
     def search_libraries(self, jenis_perpustakaan, subjenis, provinsi, kab_kota, kecamatan, kelurahan_desa):
         """proses pencarian data perpustakaan"""
         start = st.session_state.page * self.items_per_page
-        data = self.library_service.get_libraries(
+        data = library_service.get_libraries(
             jenis_perpustakaan if jenis_perpustakaan != 'Semua' else '',
             subjenis if subjenis != 'Semua' else '',
             provinsi if provinsi != 'Semua' else '',
@@ -94,12 +93,12 @@ class PerpustakaanSearchApp:
             col_jenis, col_subjenis = st.columns(2)
             with col_jenis:
                 if 'jenis_perpustakaan_options' not in st.session_state:
-                    st.session_state.jenis_perpustakaan_options = ['Semua'] + self.__get_options(self.library_service.get_jenis_perpustakaan())
+                    st.session_state.jenis_perpustakaan_options = ['Semua'] + self.__get_options(library_service.get_jenis_perpustakaan())
                 jenis_perpustakaan = st.selectbox('Jenis Perpustakaan', st.session_state.jenis_perpustakaan_options, on_change=self.__reset_page)
             with col_subjenis:
                 if jenis_perpustakaan != 'Semua':
                     if 'subjenis_options' not in st.session_state:
-                        st.session_state.subjenis_options = ['Semua'] + self.__get_options(self.library_service.get_subjenis(jenis_perpustakaan))
+                        st.session_state.subjenis_options = ['Semua'] + self.__get_options(library_service.get_subjenis(jenis_perpustakaan))
                     subjenis = st.selectbox('Subjenis', st.session_state.subjenis_options, on_change=self.__reset_page)
                 else:
                     subjenis = st.selectbox('Subjenis', ['Semua'], on_change=self.__reset_page)
@@ -108,11 +107,11 @@ class PerpustakaanSearchApp:
             col_provinsi, col_kab_kota = st.columns(2)
             with col_provinsi:
                 if 'provinsi_options' not in st.session_state:
-                    st.session_state.provinsi_options = [('', 'Semua')] + self.__get_options_with_ids(self.library_service.get_provinsi())
+                    st.session_state.provinsi_options = [('', 'Semua')] + self.__get_options_with_ids(library_service.get_provinsi())
                 provinsi = st.selectbox('Provinsi', options=st.session_state.provinsi_options, format_func=lambda x: x[1], on_change=self.__reset_page)
             with col_kab_kota:
                 if provinsi[0] != '':
-                    kab_kota_options = [('', 'Semua')] + self.__get_options_with_ids(self.library_service.get_kab_kota(provinsi[0]))
+                    kab_kota_options = [('', 'Semua')] + self.__get_options_with_ids(library_service.get_kab_kota(provinsi[0]))
                 else:
                     kab_kota_options = [('', 'Semua')]
                 kab_kota = st.selectbox('Kabupaten/Kota', options=kab_kota_options, format_func=lambda x: x[1], on_change=self.__reset_page)
@@ -121,13 +120,13 @@ class PerpustakaanSearchApp:
             col_kecamatan, col_kelurahan = st.columns(2)
             with col_kecamatan:
                 if kab_kota[0] != '':
-                    kecamatan_options = [('', 'Semua')] + self.__get_options_with_ids(self.library_service.get_kecamatan(kab_kota[0]))
+                    kecamatan_options = [('', 'Semua')] + self.__get_options_with_ids(library_service.get_kecamatan(kab_kota[0]))
                 else:
                     kecamatan_options = [('', 'Semua')]
                 kecamatan = st.selectbox('Kecamatan', options=kecamatan_options, format_func=lambda x: x[1], on_change=self.__reset_page)
             with col_kelurahan:
                 if kecamatan[0] != '':
-                    kelurahan_desa_options = [('', 'Semua')] + self.__get_options_with_ids(self.library_service.get_kelurahan_desa(kecamatan[0]))
+                    kelurahan_desa_options = [('', 'Semua')] + self.__get_options_with_ids(library_service.get_kelurahan_desa(kecamatan[0]))
                 else:
                     kelurahan_desa_options = [('', 'Semua')]
                 kelurahan_desa = st.selectbox('Kelurahan/Desa', options=kelurahan_desa_options, format_func=lambda x: x[1], on_change=self.__reset_page)
