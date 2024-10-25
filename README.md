@@ -15,14 +15,14 @@ To run this project, you need to add the following environment variables to your
 clone project using git
 
 ```bash
-    git clone https://github.com/bal-19/streamsilit-perpustakaan.git
-    cd streamsilit-perpustakaan
+git clone https://github.com/bal-19/streamsilit-perpustakaan.git
+cd streamsilit-perpustakaan
 ```
 
 create python virtual environment
 
 ```bash
-    python -m venv .venv
+python3 -m venv .venv
 ```
 
 activate virtual environment
@@ -30,23 +30,23 @@ activate virtual environment
 -   Windows
 
 ```bash
-    .venv\Scripts\Activate.ps1
+.venv\Scripts\Activate.ps1
 ```
 
 -   Linux
 
 ```bash
-    .venv\bin\activate
+source .venv/bin/activate
 ```
 
 install project requirements
 
 ```bash
-    pip install -r requirements.txt
+pip install -r requirements.txt
 ```
 
 start project
 
 ```bash
-    streamlit run search.py
+streamlit run search.py
 ```
