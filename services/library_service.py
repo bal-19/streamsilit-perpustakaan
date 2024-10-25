@@ -11,7 +11,7 @@ api_url = os.getenv("API_URL")
         
 @st.cache_data(ttl=1800, show_spinner=False)
 def get_jenis_perpustakaan() -> list:
-    res = requests.get(f"{api_url}/list/type")
+    res = requests.get(f"{api_url}/api/v1/perpustakaan/list/type")
     if res.status_code == 200:
         return res.json().get("types", [])
     else:
@@ -19,7 +19,7 @@ def get_jenis_perpustakaan() -> list:
 
 @st.cache_data(ttl=1800, show_spinner=False)
 def get_subjenis(jenis_perpustakaan: str) -> list:
-    res = requests.get(f"{api_url}/list/subtype/{jenis_perpustakaan}")
+    res = requests.get(f"{api_url}/api/v1/perpustakaan/list/subtype/{jenis_perpustakaan}")
     if res.status_code == 200:
         return res.json().get("subtypes", [])
     else:
@@ -27,7 +27,7 @@ def get_subjenis(jenis_perpustakaan: str) -> list:
 
 @st.cache_data(ttl=1800, show_spinner=False)
 def get_provinsi() -> list[dict]:
-    res = requests.get(f"{api_url}/list/region/provinces")
+    res = requests.get(f"{api_url}/api/v1/perpustakaan/list/region/provinces")
     if res.status_code == 200:
         return res.json().get("data", [])
     else:
@@ -35,7 +35,7 @@ def get_provinsi() -> list[dict]:
 
 @st.cache_data(ttl=1800, show_spinner=False)
 def get_kab_kota(provinsi: str) -> list[dict]:
-    res = requests.get(f"{api_url}/list/region/regencies/{provinsi}")
+    res = requests.get(f"{api_url}/api/v1/perpustakaan/list/region/regencies/{provinsi}")
     if res.status_code == 200:
         return res.json().get("data", [])
     else:
@@ -43,7 +43,7 @@ def get_kab_kota(provinsi: str) -> list[dict]:
 
 @st.cache_data(ttl=1800, show_spinner=False)
 def get_kecamatan(kab_kota: str) -> list[dict]:
-    res = requests.get(f"{api_url}/list/region/districts/{kab_kota}")
+    res = requests.get(f"{api_url}/api/v1/perpustakaan/list/region/districts/{kab_kota}")
     if res.status_code == 200:
         return res.json().get("data", [])
     else:
@@ -51,7 +51,7 @@ def get_kecamatan(kab_kota: str) -> list[dict]:
 
 @st.cache_data(ttl=1800, show_spinner=False)
 def get_kelurahan_desa(kecamatan: str) -> list[dict]:
-    res = requests.get(f"{api_url}/list/region/villages/{kecamatan}")
+    res = requests.get(f"{api_url}/api/v1/perpustakaan/list/region/villages/{kecamatan}")
     if res.status_code == 200:
         return res.json().get("data", [])
     else:
@@ -70,7 +70,7 @@ def get_libraries(jenis_perpustakaan: str, subjenis: str, provinsi: str, kab_kot
         "length": "10"
     }
     
-    res = requests.get(f"{api_url}/data", params=params)
+    res = requests.get(f"{api_url}/api/v1/perpustakaan/data", params=params)
     if res.status_code == 200:
         return res.json()
     else:
