@@ -62,5 +62,5 @@ mv .env.example .env
 start project
 
 ```bash
-streamlit run search.py
+streamlit run search.py --server.address 0.0.0.0 --server.port 2000
 ```
