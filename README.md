@@ -45,6 +45,20 @@ install project requirements
 pip install -r requirements.txt
 ```
 
+renaming .env file
+
+-   Windows
+
+```bash
+ren .env.example .env
+```
+
+-   Linux
+
+```bash
+mv .env.example .env
+```
+
 start project
 
 ```bash
